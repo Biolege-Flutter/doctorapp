@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "812968787642",
+    "project_id": "biolegedoctor",
+    "storage_bucket": "biolegedoctor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812968787642:android:1a9bc506856a68373a4c83",
+        "android_client_info": {
+          "package_name": "com.example.docdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812968787642-37n8b2dra7alp17j01v8lanhuhmfp9t8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfsnYD2oZqG_PUxsFz90-o_0szFBcKmyc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812968787642-37n8b2dra7alp17j01v8lanhuhmfp9t8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
