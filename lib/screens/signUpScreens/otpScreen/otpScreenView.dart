@@ -1,3 +1,5 @@
+import 'package:biolege/screens/homeScreen/homeScreenView.dart';
+
 import '../../../theme/theme.dart';
 import '../../../widgets/animations.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +134,7 @@ class _OTPScreenViewState extends State<OTPScreenView> {
                         1.5,
                         buildOutlineButton(
                           "Continue",
-                          !model.getErrorStatus
+                       !model.getErrorStatus
                               ? null
                               : () {
                                   model.startVerifingOTP();

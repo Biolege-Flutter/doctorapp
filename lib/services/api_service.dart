@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:biolege/app/locator.dart';
 import 'package:biolege/models/clinic.dart';
 import 'package:biolege/models/doctor.dart';
+import 'package:biolege/models/doctorCustormer.dart';
 import 'package:biolege/services/dataFromAPI.dart';
 import 'package:biolege/services/local_storage.dart';
 import 'package:http/http.dart' as http;
@@ -27,6 +28,12 @@ class APIService {
   String urlGetAllClinics = "clinics";
   String urlGetClinicById = "clinic/:clinicId";
 
+  // Diagnostic Customers
+  String urlDiagnosticCustomerCreate = "diagnostic/customer/create";
+  String urlUpdateDiagnosticCustomer = "diagnostic/customer";
+  String urlDiagnosticCustomerGet = "diagnostic/customer";
+  String urlGetAllDiagnosticCustomers = "diagnostic/customers";
+  String urlGetDiagnosticCustomerByPhone = "diagnostic/customer/phone/";
   // Create Doctor
 
   Future createDoctor() async {
@@ -358,4 +365,86 @@ class APIService {
       return null;
     }
   }
+
+// Fetches diagnostic customer data from the api by using customer phone
+  Future<DoctorCustomer> getDiagnosticCustomerByPhone(String phone) async {
+    // _________________________________________________________________________
+    // Locating Dependencies
+    final SnackbarService _snackBarService = locator<SnackbarService>();
+    // final StorageService _storageService = locator<StorageService>();
+    // _________________________________________________________________________
+    try {
+      // _______________________________________________________________________
+      
+            var getDiagnosticCustomerUri =
+                Uri.parse('$url$urlGetDiagnosticCustomerByPhone$phone');
+      print(getDiagnosticCustomerUri);
+      // _______________________________________________________________________
+      // Creating get requests
+      var getDiagnosticCustomerRequest =
+          new http.Request("GET", getDiagnosticCustomerUri);
+      // _______________________________________________________________________
+      // Receiving the JSON response
+      var getDiagnosticCustomerResponse =
+          await getDiagnosticCustomerRequest.send();
+      var getDiagnosticCustomerResponseString =
+          await getDiagnosticCustomerResponse.stream.bytesToString();
+      var getDiagnosticCustomerResponseJson =
+          json.decode(getDiagnosticCustomerResponseString);
+      if (getDiagnosticCustomerResponseString.length == 2) return null;
+
+      return DoctorCustomer.fromJson(getDiagnosticCustomerResponseJson[0]);
+    } catch (e) {
+      print("At get diagnostic customer by phone : " + e.toString());
+      _snackBarService.showSnackbar(message: e.toString());
+      return null;
+    }
+  }
+
+  // Fetches all diagnostic customers from the API
+  Future getAllDiagnosticCustomers() async {
+    // _______________________________________________________________________
+    // Locating Dependencies
+    final SnackbarService _snackBarService = locator<SnackbarService>();
+    final DataFromAPIService _dataFromApi = locator<DataFromAPIService>();
+    // _______________________________________________________________________
+    try {
+      // URL to be called
+      var uri = Uri.parse('$url$urlGetAllDiagnosticCustomers');
+      // Creating a get request
+      var request = new http.Request("GET", uri);
+      // _______________________________________________________________________
+
+      // _______________________________________________________________________
+      // Receiving the JSON response
+      var response = await request.send();
+      var responseString = await response.stream.bytesToString();
+      var responseJson = json.decode(responseString);
+
+      // _______________________________________________________________________
+      // Serializing Json to DiagnosticCustomer Class
+      List<DoctorCustomer> dgncstlist = [];
+      Map<String, DoctorCustomer> customerAndDetailsMapping = {};
+
+      responseJson.forEach((dgncst) {
+        DoctorCustomer x = DoctorCustomerFromJson(json.encode(dgncst));
+        dgncstlist.add(x);
+        customerAndDetailsMapping[x.id] = x;
+      });
+
+      await _dataFromApi
+          .setDiagnosticCustomersMappedList(customerAndDetailsMapping);
+
+      // _______________________________________________________________________
+      return dgncstlist;
+    } catch (e) {
+      print("At get all diagnostic customer : " + e.toString());
+      _snackBarService.showSnackbar(message: e.toString());
+      return [];
+    }
+  }
+
+
+
 }
+

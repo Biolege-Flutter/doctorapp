@@ -1,6 +1,8 @@
 import 'package:biolege/app/size_configuration.dart';
+import 'package:biolege/screens/patientAppointment/patients/patientsViewModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 // import 'package:biolege/MyAccount.dart';
 // import 'package:biolege/PatientDetailsInfo.dart';
 // import 'package:biolege/Article.dart';
@@ -10,7 +12,9 @@ import 'package:flutter/material.dart';
 class Patients extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ViewModelBuilder<PatientsViewModel>.reactive(builder: (context, model,child){
+      return !model.isBusy 
+      ? Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: ListView(
@@ -98,273 +102,122 @@ class Patients extends StatelessWidget {
                   SizedBox(
                     height: 25,
                   ),
-                  Container(
-                    color: Colors.white,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(.2),
-                              blurRadius: 10,
-                            )
-                          ],
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(20.0))),
+                  ////////
+                  model.customerDoctor != null &&
+                  model.customerDoctor.length != 0 
+                  ? 
+                  ListView.builder(
+                    primary: false,
+                    itemCount:
+                    model.customerDoctor.length,
+                    shrinkWrap: true,
+                itemBuilder: (context, index)
+                { 
+                  return Container(
+                      color: Colors.white,
                       child: Container(
-                        margin: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 55,
-                                  width: 55,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffC4C4C4),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(50))),
-                                ), //imageBlank
-                              ],
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Anwar Ali Khan',
-                                      style: TextStyle(
-                                          fontFamily: 'Nunito', fontSize: 15),
-                                    )
-                                  ],
-                                ), //Himmat
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'First visit',
-                                      style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontSize: 13,
-                                          color: Color(0xff808080)),
-                                    ),
-                                  ],
-                                ), //chest
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 60,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '11:30 AM',
-                                  style: TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 12,
-                                      color: Color(0xff808080)),
-                                ),
-                              ],
-                            )
-                          ],
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(.2),
+                                blurRadius: 10,
+                              )
+                            ],
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0))),
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 18.0,
+                                    backgroundImage: NetworkImage(
+                                    'https://via.placeholder.com/150'),
+                                    backgroundColor:
+                                      Colors.transparent,
+                                            ), //imageBlank
+                                ],
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        model.customerDoctor[index].name,
+                                        style: TextStyle(
+                                            fontFamily: 'Nunito', fontSize: 15),
+                                      )
+                                    ],
+                                  ), //Himmat
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        model.customerDoctor[index].gender,
+                                        style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontSize: 13,
+                                            color: Color(0xff808080)),
+                                      ),
+                                    ],
+                                  ), //chest
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 60,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    model.customerDoctor[index].doctors
+                                    .last.
+                                    visitingDate
+                                    .last
+                                    .date
+                                    .hour
+                                    .toString()
+                                    + ":"+
+                                     model.customerDoctor[index].doctors
+                                    .last.
+                                    visitingDate
+                                    .last
+                                    .date
+                                    .minute
+                                    .toString(),
+                                    style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontSize: 12,
+                                        color: Color(0xff808080)),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
+                    ); }
+                  )
+                  : Center(
+                    child: Text("No Appointments to show"),
                     ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(.2),
-                              blurRadius: 10,
-                            )
-                          ],
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(20.0))),
-                      child: Container(
-                        margin: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 55,
-                                  width: 55,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffC4C4C4),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(50))),
-                                ), //imageBlank
-                              ],
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Anwar Ali Khan',
-                                      style: TextStyle(
-                                          fontFamily: 'Nunito', fontSize: 15),
-                                    )
-                                  ],
-                                ), //Himmat
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'First visit',
-                                      style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontSize: 13,
-                                          color: Color(0xff808080)),
-                                    ),
-                                  ],
-                                ), //chest
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 60,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '11:30 AM',
-                                  style: TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 12,
-                                      color: Color(0xff808080)),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(.2),
-                              blurRadius: 10,
-                            )
-                          ],
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(20.0))),
-                      child: Container(
-                        margin: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 55,
-                                  width: 55,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffC4C4C4),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(50))),
-                                ), //imageBlank
-                              ],
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Anwar Ali Khan',
-                                      style: TextStyle(
-                                          fontFamily: 'Nunito', fontSize: 15),
-                                    )
-                                  ],
-                                ), //Himmat
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'First visit',
-                                      style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontSize: 13,
-                                          color: Color(0xff808080)),
-                                    ),
-                                  ],
-                                ), //chest
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 60,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '11:30 AM',
-                                  style: TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 12,
-                                      color: Color(0xff808080)),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
@@ -374,6 +227,16 @@ class Patients extends StatelessWidget {
           ],
         ),
       ),
-    );
+    )
+    : Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+    }, 
+    
+    viewModelBuilder:()=> PatientsViewModel()
+    )
+    ;
   }
 }

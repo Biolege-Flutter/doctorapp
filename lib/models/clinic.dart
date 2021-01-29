@@ -132,26 +132,53 @@ class ClinicEmployeeObject {
   Map<String, dynamic> toJson() => {};
 }
 
+
+class AppointmentDate {
+  AppointmentDate({
+    this.date,
+    this.isCompleted,
+  });
+
+  DateTime date;
+  int isCompleted;
+
+  factory AppointmentDate.fromJson(Map<String, dynamic> json) =>
+      AppointmentDate(
+        date: DateTime.parse(json["date"]),
+        isCompleted: json["isCompleted"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "date": date.toIso8601String(),
+        "isCompleted": isCompleted,
+      };
+}
+
+
+
 class CustomerElement {
   CustomerElement({
     this.customer,
     this.appointmentDate,
+    this.id
   });
 
   CustomerCustomer customer;
-  List<DateTime> appointmentDate;
-
+  List<AppointmentDate> appointmentDate;
+  String id;
   factory CustomerElement.fromJson(Map<String, dynamic> json) =>
       CustomerElement(
         customer: CustomerCustomer.fromJson(json["customer"]),
-        appointmentDate: List<DateTime>.from(
-            json["appointmentDate"].map((x) => DateTime.parse(x))),
+        appointmentDate: List<AppointmentDate>.from(
+            json["appointmentDate"].map((x) => AppointmentDate.fromJson(x))),
+        id: json["_id"]
       );
 
   Map<String, dynamic> toJson() => {
         "customer": customer.toJson(),
         "appointmentDate":
-            List<dynamic>.from(appointmentDate.map((x) => x.toIso8601String())),
+            List<dynamic>.from(appointmentDate.map((x) => x.toJson())),
+        "_id":id,
       };
 }
 
